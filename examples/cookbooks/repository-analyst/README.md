@@ -1,7 +1,6 @@
 # Repository Analyst — Read-Only SQL Queries
 
-Port of a verified SQL analyst (originally written for Fireworks) to the
-Crusoe inference stack. This module exposes a single read-only SQL query
+Adapts the Fireworks SQL tool workflow to the Crusoe inference stack. This module exposes a single read-only SQL query
 entrypoint over an in-memory snapshot of a repository dataset.
 
 ## The real Crusoe client
@@ -19,23 +18,24 @@ The key is consumed by the hosting application (see `run.py` below); this
 module itself performs no network access and therefore does not read the
 key directly.
 
-## run.py usage
+## Run the cookbook
 
-The `execute(payload)` function is a pure, dependency-free function. A thin
-driver such as `run.py` wraps it and forwards the result to the Crusoe
-client:
+Use Python 3.12 or later. From this directory, set `CRUSOE_API_KEY` in your environment and run:
 
-```python
-import json
-import query
-
-payload = json.loads(sys.stdin.read())
-print(json.dumps(query.execute(payload)))
+```sh
+python3 run.py "Which three repositories have the most stars?"
+python3 run.py "For each owner, sum the stars and sort by owner."
 ```
 
-The real `run.py` is responsible for: loading the model/client, reading
-`CRUSOE_API_KEY`, decoding the request payload, calling
-`query.execute(payload)`, and serializing the returned JSON object.
+The included `run.py` fetches a fresh metadata snapshot of six public GitHub repositories. Optional `GH_TOKEN` increases the GitHub API allowance. It sends the question to the real Crusoe endpoint through `client.py`; the model calls schema and SQL tools backed by `query.execute`. The JSON output includes the answer, executed SQL, result table, and actual provider response IDs and usage.
+
+The standalone command runs the reviewed module locally. The AYA browser demonstration executes that same module in a restricted container and retains the deployed source digest. Neither path substitutes saved results for live API calls.
+
+Run the unit and delivery checks with:
+
+```sh
+python3 -m unittest discover -s tests -v
+```
 
 ## Dependencies
 
