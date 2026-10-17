@@ -1,0 +1,1162 @@
+{
+  "run": "492e2ca7851347f5",
+  "issue": "https://github.com/Ali-Maq/crusoe-developer-hub/issues/1",
+  "contract_sha256": "7c56492fc8333c3a770e2b692ee8df12652266bd6bb768dec1cde2486b2a5ee6",
+  "reference_sha256": "3d362c60eb258dba706b838092dc41cc892dee00b541c9ff1b924c35bd2e9b64",
+  "reference_url": "https://github.com/fw-ai/cookbook/blob/6ada4081cf7bdb5cec7dcf066dd29d784f55b232/training/case-studies/agentic_rl_text2sql/sql_tools.py",
+  "module_sha256": "c79ae1a51002b2132b511e4fad4be785dd5e60fb54088a9ba90e771b92a897ff",
+  "development": {
+    "source_sha256": "c79ae1a51002b2132b511e4fad4be785dd5e60fb54088a9ba90e771b92a897ff",
+    "total": 118,
+    "passed": 118,
+    "seed": "15388528694062393949",
+    "evaluator_version": "aya-sql-v1"
+  },
+  "holdout": {
+    "source_sha256": "c79ae1a51002b2132b511e4fad4be785dd5e60fb54088a9ba90e771b92a897ff",
+    "total": 118,
+    "passed": 118,
+    "seed": "9633811139305601742",
+    "evaluator_version": "aya-sql-v1"
+  },
+  "live_checks": {
+    "passed": 4,
+    "total": 4,
+    "checks": [
+      {
+        "question": "Which three repositories have the most stars? Return repo and stars, ordered by stars descending, then repo ascending.",
+        "passed": true,
+        "expected": {
+          "columns": [
+            "repo",
+            "stars"
+          ],
+          "rows": [
+            [
+              "fw-ai/cookbook",
+              228
+            ],
+            [
+              "perplexityai/api-cookbook",
+              202
+            ],
+            [
+              "youdotcom-oss/agent-skills",
+              92
+            ]
+          ]
+        },
+        "actual": {
+          "answer": "The three repositories with the most stars are:\n\n| Repository | Stars |\n|---|---|\n| fw-ai/cookbook | 228 |\n| perplexityai/api-cookbook | 202 |\n| youdotcom-oss/agent-skills | 92 |",
+          "sql": "SELECT repo, stars FROM repositories ORDER BY stars DESC, repo ASC LIMIT 3",
+          "columns": [
+            "repo",
+            "stars"
+          ],
+          "rows": [
+            [
+              "fw-ai/cookbook",
+              228
+            ],
+            [
+              "perplexityai/api-cookbook",
+              202
+            ],
+            [
+              "youdotcom-oss/agent-skills",
+              92
+            ]
+          ],
+          "trace": [
+            {
+              "response_id": "34b7dcdc786e4807af05b175ebc277c0",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 463,
+                "total_tokens": 510,
+                "completion_tokens": 47,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_81b541edd4d6425ab9367943",
+                  "index": 0,
+                  "type": "function",
+                  "function": {
+                    "name": "get_database_schema",
+                    "arguments": "{}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "e780ecf4203e4585a1a7671a2a17d95f",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 560,
+                "total_tokens": 621,
+                "completion_tokens": 61,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_5aa81e14f0f7453983c1a580",
+                  "index": 1,
+                  "type": "function",
+                  "function": {
+                    "name": "run_sql",
+                    "arguments": "{\"sql\": \"SELECT repo, stars FROM repositories ORDER BY stars DESC, repo ASC LIMIT 3\"}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "a74fe0604e06431db3e7640da1bb5670",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 684,
+                "total_tokens": 739,
+                "completion_tokens": 55,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": null
+            }
+          ],
+          "provider": "Crusoe",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "record_count": 6
+        }
+      },
+      {
+        "question": "For each owner, what is the sum of stars? Return owner and total, ordered by owner.",
+        "passed": true,
+        "expected": {
+          "columns": [
+            "owner",
+            "total"
+          ],
+          "rows": [
+            [
+              "crusoecloud",
+              11
+            ],
+            [
+              "fw-ai",
+              228
+            ],
+            [
+              "perplexityai",
+              202
+            ],
+            [
+              "youdotcom-oss",
+              98
+            ]
+          ]
+        },
+        "actual": {
+          "answer": "| owner | total |\n|---|---|\n| crusoecloud | 11 |\n| fw-ai | 228 |\n| perplexityai | 202 |\n| youdotcom-oss | 98 |",
+          "sql": "SELECT owner, SUM(stars) AS total FROM repositories GROUP BY owner ORDER BY owner;",
+          "columns": [
+            "owner",
+            "total"
+          ],
+          "rows": [
+            [
+              "crusoecloud",
+              11
+            ],
+            [
+              "fw-ai",
+              228
+            ],
+            [
+              "perplexityai",
+              202
+            ],
+            [
+              "youdotcom-oss",
+              98
+            ]
+          ],
+          "trace": [
+            {
+              "response_id": "9425faf356b143129ba18ecca4aa41f9",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 461,
+                "total_tokens": 504,
+                "completion_tokens": 43,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_3ac1f696d2144badb68974d6",
+                  "index": 0,
+                  "type": "function",
+                  "function": {
+                    "name": "get_database_schema",
+                    "arguments": "{}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "f541875604e44662bd090eef9e4b13ba",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 554,
+                "total_tokens": 615,
+                "completion_tokens": 61,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_cf044f21db4b4d9c9aff5a22",
+                  "index": 1,
+                  "type": "function",
+                  "function": {
+                    "name": "run_sql",
+                    "arguments": "{\"sql\": \"SELECT owner, SUM(stars) AS total FROM repositories GROUP BY owner ORDER BY owner;\"}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "67a86863b8154640b8ff8c05debc14b6",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 676,
+                "total_tokens": 719,
+                "completion_tokens": 43,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": null
+            }
+          ],
+          "provider": "Crusoe",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "record_count": 6
+        }
+      },
+      {
+        "question": "How many repositories are in this snapshot? Return one total column.",
+        "passed": true,
+        "expected": {
+          "columns": [
+            "total"
+          ],
+          "rows": [
+            [
+              6
+            ]
+          ]
+        },
+        "actual": {
+          "answer": "There are **6** repositories in this snapshot.",
+          "sql": "SELECT COUNT(*) AS total FROM repositories",
+          "columns": [
+            "total"
+          ],
+          "rows": [
+            [
+              6
+            ]
+          ],
+          "trace": [
+            {
+              "response_id": "27487b2464314f088e99768a44a5d4db",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 454,
+                "total_tokens": 485,
+                "completion_tokens": 31,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_12b94bcffd2247f28f10c2bd",
+                  "index": 0,
+                  "type": "function",
+                  "function": {
+                    "name": "get_database_schema",
+                    "arguments": "{}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "70d2c27f629b4f26875cd54b0e37eef6",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 535,
+                "total_tokens": 586,
+                "completion_tokens": 51,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_0c95d55ce2074a44a7e802bc",
+                  "index": 1,
+                  "type": "function",
+                  "function": {
+                    "name": "run_sql",
+                    "arguments": "{\"sql\": \"SELECT COUNT(*) AS total FROM repositories\"}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "281a2ce6f15c448f99305a231d5fd6c9",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 609,
+                "total_tokens": 620,
+                "completion_tokens": 11,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": null
+            }
+          ],
+          "provider": "Crusoe",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "record_count": 6
+        }
+      },
+      {
+        "question": "List repo and license for the Crusoe repositories only, ordered by repo.",
+        "passed": true,
+        "expected": {
+          "columns": [
+            "repo",
+            "license"
+          ],
+          "rows": [
+            [
+              "crusoecloud/crusoe-cookbook",
+              "Apache-2.0"
+            ],
+            [
+              "crusoecloud/crusoe-developer-hub",
+              "MIT"
+            ]
+          ]
+        },
+        "actual": {
+          "answer": "Crusoe repositories (owner `crusoecloud`):\n\n| Repo | License |\n|------|---------|\n| crusoecloud/crusoe-cookbook | Apache-2.0 |\n| crusoecloud/crusoe-developer-hub | MIT |",
+          "sql": "SELECT repo, license FROM repositories WHERE owner = 'crusoecloud' ORDER BY repo",
+          "columns": [
+            "repo",
+            "license"
+          ],
+          "rows": [
+            [
+              "crusoecloud/crusoe-cookbook",
+              "Apache-2.0"
+            ],
+            [
+              "crusoecloud/crusoe-developer-hub",
+              "MIT"
+            ]
+          ],
+          "trace": [
+            {
+              "response_id": "7c2979c88423487eb42a88ca3d1c091c",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 456,
+                "total_tokens": 501,
+                "completion_tokens": 45,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_75d7cceb642f43918ecd67b6",
+                  "index": 0,
+                  "type": "function",
+                  "function": {
+                    "name": "get_database_schema",
+                    "arguments": "{}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "5136062f06454f949ddb8ce5b9bcbef8",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 551,
+                "total_tokens": 612,
+                "completion_tokens": 61,
+                "prompt_tokens_details": {
+                  "cached_tokens": 256
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_e122fcb4661549058e867be9",
+                  "index": 1,
+                  "type": "function",
+                  "function": {
+                    "name": "run_sql",
+                    "arguments": "{\"sql\": \"SELECT repo, license FROM repositories WHERE owner = 'Crusoe' ORDER BY repo\"}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "b00d4e85b0e74b2cb8cf027fbee81918",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 636,
+                "total_tokens": 704,
+                "completion_tokens": 68,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_75507b3d7cdc445392229adb",
+                  "index": 1,
+                  "type": "function",
+                  "function": {
+                    "name": "run_sql",
+                    "arguments": "{\"sql\": \"SELECT DISTINCT owner FROM repositories ORDER BY owner\"}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "44cd9b85a66e433c9f489f9f222cd908",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 751,
+                "total_tokens": 813,
+                "completion_tokens": 62,
+                "prompt_tokens_details": {
+                  "cached_tokens": 512
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": [
+                {
+                  "id": "call_a03a66a019b3439daacb6c77",
+                  "index": 1,
+                  "type": "function",
+                  "function": {
+                    "name": "run_sql",
+                    "arguments": "{\"sql\": \"SELECT repo, license FROM repositories WHERE owner = 'crusoecloud' ORDER BY repo\"}"
+                  }
+                }
+              ]
+            },
+            {
+              "response_id": "ed50f343263b48f9a9f302eeef8f0112",
+              "model": "deepseek-ai/DeepSeek-V4-Pro",
+              "usage": {
+                "prompt_tokens": 873,
+                "total_tokens": 929,
+                "completion_tokens": 56,
+                "prompt_tokens_details": {
+                  "cached_tokens": 768
+                },
+                "reasoning_tokens": 0
+              },
+              "tool_calls": null
+            }
+          ],
+          "provider": "Crusoe",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "record_count": 6
+        }
+      }
+    ],
+    "records": [
+      {
+        "repo": "fw-ai/cookbook",
+        "owner": "fw-ai",
+        "stars": 228,
+        "forks": 63,
+        "issues": 82,
+        "license": "Apache-2.0",
+        "description": "Recipes and resources for training, building generative AI with Fireworks",
+        "url": "https://github.com/fw-ai/cookbook"
+      },
+      {
+        "repo": "crusoecloud/crusoe-cookbook",
+        "owner": "crusoecloud",
+        "stars": 2,
+        "forks": 5,
+        "issues": 2,
+        "license": "Apache-2.0",
+        "description": "A collection of recipes for managing GPU infrastructure, cluster monitoring, common training and inference workflows.",
+        "url": "https://github.com/crusoecloud/crusoe-cookbook"
+      },
+      {
+        "repo": "crusoecloud/crusoe-developer-hub",
+        "owner": "crusoecloud",
+        "stars": 9,
+        "forks": 3,
+        "issues": 0,
+        "license": "MIT",
+        "description": "The Crusoe Developer Hub is the technical home for developers building AI applications and infrastructure on Crusoe Cloud. We publish three kinds of content here: foundational lessons that explain how things work, runnable examples that complete a task end to end, and integrations that connect Crusoe to the tools you already use.",
+        "url": "https://github.com/crusoecloud/crusoe-developer-hub"
+      },
+      {
+        "repo": "perplexityai/api-cookbook",
+        "owner": "perplexityai",
+        "stars": 202,
+        "forks": 113,
+        "issues": 16,
+        "license": "MIT",
+        "description": "A collection of projects and guides with Perplexity's API Platform",
+        "url": "https://github.com/perplexityai/api-cookbook"
+      },
+      {
+        "repo": "youdotcom-oss/agent-skills",
+        "owner": "youdotcom-oss",
+        "stars": 92,
+        "forks": 16,
+        "issues": 2,
+        "license": "MIT",
+        "description": "You.com skills and plugins for web search, content extraction, research, finance, and integration discovery, helping AI agents build with up-to-date web context.",
+        "url": "https://github.com/youdotcom-oss/agent-skills"
+      },
+      {
+        "repo": "youdotcom-oss/ydc-research-sample",
+        "owner": "youdotcom-oss",
+        "stars": 6,
+        "forks": 3,
+        "issues": 0,
+        "license": "MIT",
+        "description": "Research API sample — Python script + Next.js web app",
+        "url": "https://github.com/youdotcom-oss/ydc-research-sample"
+      }
+    ]
+  },
+  "reference_parity": {
+    "total": 3,
+    "passed": 3,
+    "reference": {
+      "source_sha256": "3d362c60eb258dba706b838092dc41cc892dee00b541c9ff1b924c35bd2e9b64",
+      "schema_observed": true,
+      "results": [
+        {
+          "sql": "SELECT repo, stars FROM repositories ORDER BY stars DESC, repo LIMIT 3",
+          "rows": [
+            [
+              "fw-ai/cookbook",
+              228
+            ],
+            [
+              "perplexityai/api-cookbook",
+              202
+            ],
+            [
+              "youdotcom-oss/agent-skills",
+              92
+            ]
+          ]
+        },
+        {
+          "sql": "SELECT owner, SUM(stars) AS stars FROM repositories GROUP BY owner ORDER BY owner",
+          "rows": [
+            [
+              "crusoecloud",
+              11
+            ],
+            [
+              "fw-ai",
+              228
+            ],
+            [
+              "perplexityai",
+              202
+            ],
+            [
+              "youdotcom-oss",
+              98
+            ]
+          ]
+        },
+        {
+          "sql": "SELECT COUNT(*) AS total FROM repositories",
+          "rows": [
+            [
+              6
+            ]
+          ]
+        }
+      ],
+      "scope": "Executed selected unmodified upstream AST functions; training and embeddings excluded"
+    },
+    "actual": [
+      {
+        "columns": [
+          "repo",
+          "stars"
+        ],
+        "rows": [
+          [
+            "fw-ai/cookbook",
+            228
+          ],
+          [
+            "perplexityai/api-cookbook",
+            202
+          ],
+          [
+            "youdotcom-oss/agent-skills",
+            92
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "owner",
+          "stars"
+        ],
+        "rows": [
+          [
+            "crusoecloud",
+            11
+          ],
+          [
+            "fw-ai",
+            228
+          ],
+          [
+            "perplexityai",
+            202
+          ],
+          [
+            "youdotcom-oss",
+            98
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "total"
+        ],
+        "rows": [
+          [
+            6
+          ]
+        ]
+      }
+    ],
+    "dataset_sha256": "7fa4760f3851c981b0e15b9d1f1da568aa5e4ac39f5af6f68d9cd752e98378d0"
+  },
+  "reference_evidence_ids": [
+    "ev_fab70ae1c547dd39d8851375494d37afa49472b3a14967c181bffc6aeee15c8d"
+  ],
+  "reference_evidence": [
+    {
+      "evidence_id": "ev_fab70ae1c547dd39d8851375494d37afa49472b3a14967c181bffc6aeee15c8d",
+      "subject": null,
+      "provider": {
+        "id": "rea-process",
+        "name": "REA process capture",
+        "version": "3"
+      },
+      "analysis_profile": null,
+      "predicate_type": "rea.process-capture",
+      "operation": "capture_process_scenario",
+      "parameters": {
+        "executable_name": "python3",
+        "argument_count": 2,
+        "event_count": 0,
+        "filesystem_observation_path_count": 0,
+        "normalization": {
+          "paths": false,
+          "pids": true,
+          "ports": true,
+          "time_bucket_ms": 10,
+          "patterns": []
+        }
+      },
+      "raw_result": null,
+      "normalized_result": {
+        "manifest": {
+          "rea_version": "6.5.0",
+          "provider_version": "3",
+          "platform": "linux",
+          "architecture": "arm64",
+          "pty_backend": "node-pty",
+          "started_at": "2026-10-17T22:04:13.078Z",
+          "completed_at": "2026-10-17T22:04:13.189Z",
+          "scenario": {
+            "executable": "/usr/local/bin/python3",
+            "arguments": [
+              "-B",
+              "/reference/fireworks-sql/probe.py"
+            ],
+            "working_directory": "/tmp",
+            "environment": {},
+            "filesystem_observation_paths": [],
+            "terminal": {
+              "columns": 80,
+              "rows": 24,
+              "scrollback": 1000
+            },
+            "events": [],
+            "timeout_ms": 10000,
+            "idle_timeout_ms": 30000,
+            "settle_ms": 100,
+            "limits": {
+              "output_bytes": 30000,
+              "files": 10000,
+              "file_bytes": 10000000,
+              "processes": 1000,
+              "filesystem_depth": 16
+            },
+            "normalization": {
+              "paths": false,
+              "pids": true,
+              "ports": true,
+              "time_bucket_ms": 10,
+              "patterns": []
+            },
+            "executable_sha256": "36727872f3be3469d83c23705431d90ab2b408a0ba1e3008ba3d4dd337b7f481"
+          },
+          "comparison_contract": {
+            "working_directory": "/tmp",
+            "environment": {},
+            "ambient_environment": "unknown",
+            "filesystem_observation_paths": [],
+            "terminal": {
+              "columns": 80,
+              "rows": 24,
+              "scrollback": 1000
+            },
+            "events": [],
+            "timeout_ms": 10000,
+            "idle_timeout_ms": 30000,
+            "settle_ms": 100,
+            "limits": {
+              "output_bytes": 30000,
+              "files": 10000,
+              "file_bytes": 10000000,
+              "processes": 1000,
+              "filesystem_depth": 16
+            },
+            "normalization": {
+              "paths": false,
+              "pids": true,
+              "ports": true,
+              "time_bucket_ms": 10,
+              "patterns": []
+            },
+            "port_normalization_version": "contextual-endpoints-v2",
+            "rendered_line_format": "trailing-spaces-trimmed-v1"
+          },
+          "full_scenario_sha256": "a660c7b40ab64ab02418ba6d8b38d349cc0d6af75d179518f877a9ae47a22edb",
+          "comparison_contract_sha256": "33d854f0df38828776d5e5662b213ab5055fbb28b3a6531b46960f0cd9cb1d58",
+          "selected_executable_sha256": "36727872f3be3469d83c23705431d90ab2b408a0ba1e3008ba3d4dd337b7f481",
+          "executable_sha256": "36727872f3be3469d83c23705431d90ab2b408a0ba1e3008ba3d4dd337b7f481",
+          "executable_identity": {
+            "state": "path_metadata_unchanged",
+            "reason": null
+          },
+          "normalization_sha256": "5c58aa1aa890197f15f9c59ef755d01120e6e07f356fa1ef2f20787e63b6fa87"
+        },
+        "normalization": {
+          "paths": false,
+          "pids": true,
+          "ports": true,
+          "time_bucket_ms": 10,
+          "patterns": []
+        },
+        "frames": [
+          {
+            "sequence": 0,
+            "at_ms": 20,
+            "data": "{\"source_sha256\": \"3d362c60eb258dba706b838092dc41cc892dee00b541c9ff1b924c35bd2e9b64\", \"schema_observed\": true, \"results\": [{\"sql\": \"SELECT repo, stars FROM repositories ORDER BY stars DESC, repo LIMIT 3\", \"rows\": [[\"fw-ai/cookbook\", 228], [\"perplexityai/api-cookbook\", 202], [\"youdotcom-oss/agent-skills\", 92]]}, {\"sql\": \"SELECT owner, SUM(stars) AS stars FROM repositories GROUP BY owner ORDER BY owner\", \"rows\": [[\"crusoecloud\", 11], [\"fw-ai\", 228], [\"perplexityai\", 202], [\"youdotcom-oss\", 98]]}, {\"sql\": \"SELECT COUNT(*) AS total FROM repositories\", \"rows\": [[6]]}], \"scope\": \"Executed selected unmodified upstream AST functions; training and embeddings excluded\"}\r\n"
+          }
+        ],
+        "rendered_frames": [
+          {
+            "sequence": 0,
+            "at_ms": 20,
+            "columns": 80,
+            "rows": 24,
+            "cursor_x": 0,
+            "cursor_y": 9,
+            "active_buffer": "normal",
+            "lines": [
+              "{\"source_sha256\": \"3d362c60eb258dba706b838092dc41cc892dee00b541c9ff1b924c35bd2e9",
+              "b64\", \"schema_observed\": true, \"results\": [{\"sql\": \"SELECT repo, stars FROM repo",
+              "sitories ORDER BY stars DESC, repo LIMIT 3\", \"rows\": [[\"fw-ai/cookbook\", 228], [",
+              "\"perplexityai/api-cookbook\", 202], [\"youdotcom-oss/agent-skills\", 92]]}, {\"sql\":",
+              " \"SELECT owner, SUM(stars) AS stars FROM repositories GROUP BY owner ORDER BY ow",
+              "ner\", \"rows\": [[\"crusoecloud\", 11], [\"fw-ai\", 228], [\"perplexityai\", 202], [\"you",
+              "dotcom-oss\", 98]]}, {\"sql\": \"SELECT COUNT(*) AS total FROM repositories\", \"rows\"",
+              ": [[6]]}], \"scope\": \"Executed selected unmodified upstream AST functions; traini",
+              "ng and embeddings excluded\"}",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "serialized_state": "{\"source_sha256\": \"3d362c60eb258dba706b838092dc41cc892dee00b541c9ff1b924c35bd2e9b64\", \"schema_observed\": true, \"results\": [{\"sql\": \"SELECT repo, stars FROM repositories ORDER BY stars DESC, repo LIMIT 3\", \"rows\": [[\"fw-ai/cookbook\", 228], [\"perplexityai/api-cookbook\", 202], [\"youdotcom-oss/agent-skills\", 92]]}, {\"sql\": \"SELECT owner, SUM(stars) AS stars FROM repositories GROUP BY owner ORDER BY owner\", \"rows\": [[\"crusoecloud\", 11], [\"fw-ai\", 228], [\"perplexityai\", 202], [\"youdotcom-oss\", 98]]}, {\"sql\": \"SELECT COUNT(*) AS total FROM repositories\", \"rows\": [[6]]}], \"scope\": \"Executed selected unmodified upstream AST functions; training and embeddings excluded\"}\u001b[1B\u001b[28D"
+          }
+        ],
+        "interaction_events": [],
+        "exit": {
+          "code": 0,
+          "signal": 0,
+          "reason": "exited"
+        },
+        "settlement": {
+          "state": "quiesced",
+          "elapsed_ms": 56,
+          "cleanup_outcome": "not_required"
+        },
+        "process_samples": [
+          {
+            "at_ms": 0,
+            "pid": 1,
+            "parent_pid": 2,
+            "command": "/usr/local/bin/python3 -B /reference/fireworks-sql/probe.py",
+            "process_group_id": 1,
+            "session_id": 1
+          }
+        ],
+        "filesystem_checkpoints": [
+          {
+            "name": "before",
+            "at_ms": 0,
+            "files": [],
+            "effects": [],
+            "truncated": false
+          },
+          {
+            "name": "after_settlement",
+            "at_ms": 111,
+            "files": [],
+            "effects": [],
+            "truncated": false
+          }
+        ],
+        "event_journal": [
+          {
+            "capture_order": 0,
+            "collection": "filesystem_checkpoints",
+            "index": 0
+          },
+          {
+            "capture_order": 1,
+            "collection": "process_samples",
+            "index": 0
+          },
+          {
+            "capture_order": 2,
+            "collection": "frames",
+            "index": 0
+          },
+          {
+            "capture_order": 3,
+            "collection": "rendered_frames",
+            "index": 0
+          },
+          {
+            "capture_order": 4,
+            "collection": "lifecycle",
+            "index": 0
+          },
+          {
+            "capture_order": 5,
+            "collection": "lifecycle",
+            "index": 1
+          },
+          {
+            "capture_order": 6,
+            "collection": "filesystem_checkpoints",
+            "index": 1
+          }
+        ],
+        "files_before": [],
+        "files_after": [],
+        "filesystem_effects": [],
+        "truncated": false,
+        "truncation_details": {
+          "raw_terminal": {
+            "budget_bytes": 30000,
+            "observed_bytes": 670,
+            "retained_bytes": 670,
+            "observed_frames": 1,
+            "retained_frames": 1
+          },
+          "rendered_terminal": {
+            "budget_bytes": 30000,
+            "observed_bytes": 1345,
+            "retained_bytes": 1345,
+            "observed_frames": 1,
+            "retained_frames": 1
+          },
+          "normalized_terminal": {
+            "budget_bytes": 30000,
+            "retained_bytes": 670,
+            "omitted_frames": 0
+          },
+          "filesystem_before": {
+            "files_limit": 10000,
+            "depth_limit": 16,
+            "enumeration_truncated": false,
+            "enumeration_reasons": [],
+            "enumeration_omissions": [],
+            "hash_budget_bytes": 10000000,
+            "hashed_bytes": 0,
+            "hash_omissions": []
+          },
+          "filesystem_after": {
+            "files_limit": 10000,
+            "depth_limit": 16,
+            "enumeration_truncated": false,
+            "enumeration_reasons": [],
+            "enumeration_omissions": [],
+            "hash_budget_bytes": 10000000,
+            "hashed_bytes": 0,
+            "hash_omissions": []
+          },
+          "process": {
+            "sample_limit": 1000,
+            "sampling_partial": false,
+            "retained_samples": 1,
+            "sample_limit_reached": false,
+            "sampling_failures": 0,
+            "first_sampling_failure": null,
+            "coverage": "sampled"
+          }
+        },
+        "limitations": [
+          "The executable digest is a prelaunch file sample; matching path metadata immediately after spawn does not prove an atomic operating-system image binding.",
+          "Process trees are sampled and may omit short-lived descendants.",
+          "Filesystem observations are before/after snapshots, not syscall traces.",
+          "Inherited host environment variables are not recorded and may affect results.",
+          "No filesystem observation paths were selected; filesystem effects remain unknown."
+        ],
+        "residual_unknowns": [
+          {
+            "scope": "process",
+            "reason": "Process trees are sampled and may omit short-lived descendants."
+          },
+          {
+            "scope": "process",
+            "reason": "The executable digest is a prelaunch file sample; operating-system image binding is not atomically observed."
+          },
+          {
+            "scope": "environment",
+            "reason": "Inherited host environment variables are not recorded."
+          },
+          {
+            "scope": "network",
+            "reason": "Network activity is not observed by this capture."
+          },
+          {
+            "scope": "filesystem",
+            "reason": "No filesystem observation paths were selected; filesystem effects remain unknown."
+          }
+        ],
+        "cleanup": {
+          "owned_process_group": "verified",
+          "temporary_root": "removed"
+        }
+      },
+      "confidence": "observed",
+      "authority": "controlled-replay",
+      "environment": {
+        "id": "linux-arm64",
+        "platform": "linux",
+        "architecture": "arm64",
+        "isolation": "process"
+      },
+      "limitations": [
+        "Artifact identity is unavailable for this observation.",
+        "The executable digest is a prelaunch file sample; matching path metadata immediately after spawn does not prove an atomic operating-system image binding.",
+        "Process trees are sampled and may omit short-lived descendants.",
+        "Filesystem observations are before/after snapshots, not syscall traces.",
+        "Inherited host environment variables are not recorded and may affect results.",
+        "No filesystem observation paths were selected; filesystem effects remain unknown."
+      ],
+      "relationship_coverage": null,
+      "locations": [],
+      "evidence_links": []
+    }
+  ],
+  "native_agents": [
+    {
+      "sessions": [
+        {
+          "id": "20261017_220529_63133a",
+          "source": "subagent",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "billing_provider": "custom",
+          "parent_session_id": "20261017_220434_c9662b",
+          "tool_call_count": 13,
+          "input_tokens": 24316,
+          "output_tokens": 10417,
+          "api_call_count": 13,
+          "tools": [
+            "execute_code",
+            "read_file"
+          ]
+        },
+        {
+          "id": "20261017_220434_c9662b",
+          "source": "cli",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "billing_provider": "custom",
+          "parent_session_id": null,
+          "tool_call_count": 35,
+          "input_tokens": 38100,
+          "output_tokens": 15865,
+          "api_call_count": 33,
+          "tools": [
+            "delegate_task",
+            "execute_code",
+            "patch",
+            "read_file",
+            "skill_view",
+            "terminal",
+            "write_file"
+          ]
+        }
+      ],
+      "child_sessions": 1,
+      "api_calls": 46,
+      "input_tokens": 62416,
+      "output_tokens": 26282
+    },
+    {
+      "sessions": [
+        {
+          "id": "20261017_220818_229b52",
+          "source": "subagent",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "billing_provider": "custom",
+          "parent_session_id": "20261017_220731_282eb8",
+          "tool_call_count": 14,
+          "input_tokens": 26210,
+          "output_tokens": 11664,
+          "api_call_count": 14,
+          "tools": [
+            "execute_code",
+            "read_file"
+          ]
+        },
+        {
+          "id": "20261017_220731_282eb8",
+          "source": "cli",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "billing_provider": "custom",
+          "parent_session_id": null,
+          "tool_call_count": 33,
+          "input_tokens": 29869,
+          "output_tokens": 11379,
+          "api_call_count": 30,
+          "tools": [
+            "delegate_task",
+            "patch",
+            "read_file",
+            "search_files",
+            "skill_view",
+            "terminal"
+          ]
+        }
+      ],
+      "child_sessions": 1,
+      "api_calls": 44,
+      "input_tokens": 56079,
+      "output_tokens": 23043
+    },
+    {
+      "sessions": [
+        {
+          "id": "20261017_220407_c9d312",
+          "source": "cli",
+          "model": "deepseek-ai/DeepSeek-V4-Pro",
+          "billing_provider": "custom",
+          "parent_session_id": null,
+          "tool_call_count": 7,
+          "input_tokens": 19041,
+          "output_tokens": 3111,
+          "api_call_count": 7,
+          "tools": [
+            "mcp__rea__capture_process_scenario",
+            "search_files",
+            "skill_view",
+            "skills_list",
+            "terminal",
+            "tool_call",
+            "tool_describe",
+            "write_file"
+          ]
+        }
+      ],
+      "child_sessions": 0,
+      "api_calls": 7,
+      "input_tokens": 19041,
+      "output_tokens": 3111
+    }
+  ],
+  "inference": {
+    "provider": "Crusoe",
+    "endpoint": "https://api.inference.crusoecloud.com/v1",
+    "model": "deepseek-ai/DeepSeek-V4-Pro",
+    "response_id": "0706aa877c83441ea66b4f2186b34dce",
+    "usage": {
+      "prompt_tokens": 626,
+      "total_tokens": 1582,
+      "completion_tokens": 956,
+      "prompt_tokens_details": {
+        "cached_tokens": 512
+      },
+      "reasoning_tokens": 0
+    }
+  },
+  "worker": "aya-feature"
+}
