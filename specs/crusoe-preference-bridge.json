@@ -1,0 +1,17 @@
+{
+  "id": "crusoe-preference-bridge",
+  "target_repository": "Ali-Maq/crusoe-developer-hub",
+  "reference": {
+    "repository": "fw-ai/cookbook",
+    "commit": "6ada4081cf7bdb5cec7dcf066dd29d784f55b232",
+    "path": "training/examples/dpo/prepare_data.py",
+    "sha256": "df2d179295ea0fba7bf9c06db12e3a693f9e2e2c2f3bfe3bb2792fcdb7a0bd74"
+  },
+  "contract": {
+    "row_to_preference": "Match upstream conversion for strings, null, missing, empty and equal responses. Reject non-string non-null fields with ValueError.",
+    "to_trl": "Validate equal, nonempty conversation prefixes and distinct final assistant responses. Return explicit prompt/chosen/rejected message lists without mutation.",
+    "dpo_loss": "Stable scalar negative log sigmoid of beta*((policy_chosen-reference_chosen)-(policy_rejected-reference_rejected)). Require finite numbers and 0<beta<0.5."
+  },
+  "scope": "Preference data and loss portability. DPO training requires a provisioned GPU with TRL. Crusoe's documented serverless method is supervised; no DPO endpoint or completed training is claimed.",
+  "allowed_paths": ["examples/cookbooks/preference-bridge/bridge.py", "examples/cookbooks/preference-bridge/tests/test_agent.py"]
+}
