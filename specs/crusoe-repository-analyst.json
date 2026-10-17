@@ -1,0 +1,31 @@
+{
+  "id": "crusoe-repository-analyst",
+  "target_repository": "Ali-Maq/crusoe-developer-hub",
+  "title": "Port a verified SQL analyst from Fireworks to Crusoe",
+  "reference": {
+    "repository": "fw-ai/cookbook",
+    "commit": "6ada4081cf7bdb5cec7dcf066dd29d784f55b232",
+    "path": "training/case-studies/agentic_rl_text2sql/sql_tools.py",
+    "mode": "source-and-runtime",
+    "license": "Apache-2.0"
+  },
+  "allowed_paths": [
+    "examples/cookbooks/repository-analyst/query.py",
+    "examples/cookbooks/repository-analyst/tests/test_agent_query.py",
+    "examples/cookbooks/repository-analyst/README.md"
+  ],
+  "interface": "query.execute(payload) -> JSON object",
+  "input": {
+    "records": "0..500 JSON objects. Each has repo, owner, stars, forks, issues, license, description, url. Strings except stars/forks/issues which are nonnegative integers <= 2^53-1. license and description may be null. Missing or extra fields are invalid. Bool is not an integer. String length <= 4000.",
+    "sql": "A nonempty string <=4096 characters. Exactly one read-only SQLite SELECT or WITH query. Comments and literal words such as DROP are allowed. No arbitrary paths or database identifiers."
+  },
+  "behavior": [
+    "Build an in-memory SQLite table named repositories with the eight declared columns, using parameterized inserts.",
+    "Execute the requested SELECT query with SQLite semantics. Return {columns:[names],rows:[[values]]}. Preserve order, null, zero, Unicode and duplicate rows.",
+    "Use SQLite authorizer/query-only controls after initialization. Deny writes, DDL, PRAGMA, ATTACH, DETACH, extension loading, file functions and transactions. Do not rely on a keyword blacklist.",
+    "Limit result rows to 100 and columns to 20. Abort expensive queries with a SQLite progress handler.",
+    "Never access the network, disk files, subprocesses or dynamic Python internals. sqlite3.connect must use :memory:. Allowed imports: sqlite3,json,re,typing,collections,math.",
+    "Return {error:code} without raw exceptions. Codes: invalid_request for malformed payload, query_error for syntax/missing table/column, read_only for denied SQL operations, limit_exceeded for oversized payload/results or interrupted expensive queries."
+  ],
+  "scope": "Port the schema/query/result-set workflow, not Fireworks GRPO training or its Chroma retriever. The target uses Crusoe inference with fixed model weights."
+}
